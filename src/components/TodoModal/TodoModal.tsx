@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -9,10 +11,7 @@ type Props = {
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  todo,
-  onClose,
-}) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,14 +24,11 @@ export const TodoModal: React.FC<Props> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [todo.userId]);
+  }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div
-        className="modal-background"
-        onClick={onClose}
-      />
+      <div className="modal-background" onClick={onClose} />
 
       {isLoading ? (
         <Loader />
@@ -43,8 +39,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #
-              {todo.id}
+              Todo #{todo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -57,33 +52,24 @@ export const TodoModal: React.FC<Props> = ({
           </header>
 
           <div className="modal-card-body">
-            <p
-              className="block"
-              data-cy="modal-title"
-            >
+            <p className="block" data-cy="modal-title">
               {todo.title}
             </p>
 
             {user && (
-              <p
-                className="block"
-                data-cy="modal-user"
-              >
+              <p className="block" data-cy="modal-user">
                 <strong
-                  className={
-                    todo.completed
-                      ? 'has-text-success'
-                      : 'has-text-danger'
-                  }
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
                 >
                   {todo.completed ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>
-                  {user.name}
-                </a>
+                <a href={`mailto:${user.email}`}>{user.name}</a>
               </p>
             )}
           </div>

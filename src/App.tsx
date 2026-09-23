@@ -34,13 +34,11 @@ export const App: React.FC = () => {
 
     return todos.filter(todo => {
       const matchesStatus =
-        status === 'all'
-        || (status === 'completed' && todo.completed)
-        || (status === 'active' && !todo.completed);
+        status === 'all' ||
+        (status === 'completed' && todo.completed) ||
+        (status === 'active' && !todo.completed);
 
-      const matchesQuery = todo.title
-        .toLowerCase()
-        .includes(normalizedQuery);
+      const matchesQuery = todo.title.toLowerCase().includes(normalizedQuery);
 
       return matchesStatus && matchesQuery;
     });
@@ -78,10 +76,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          onClose={() => setSelectedTodo(null)}
-        />
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
